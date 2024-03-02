@@ -84,7 +84,8 @@ const emojiObj = {
   "/:cake": "蛋糕",
   "/:li": "闪电劈你"
 };
-console.log("KEYWORD_REPLAY" + process.env.KEYWORD_REPLAY);
+
+
 const keywordAutoReply = JSON.parse(process.env.KEYWORD_REPLAY);
 module.exports = async function (request, response) {
   const method = request.method;
@@ -110,12 +111,11 @@ module.exports = async function (request, response) {
   const xml = request.read().toString();
   const parser = new xml2js.Parser();
   const textMsg = await parser.parseStringPromise(xml);
-  // console.log(textMsg);
   const ToUserName = textMsg.xml.ToUserName[0];
   const FromUserName = textMsg.xml.FromUserName[0];
   const CreateTime = textMsg.xml.CreateTime[0];
   const MsgType = textMsg.xml.MsgType[0];
-  console.log("收到消息类型：" + MsgType);
+
   let Content;
   const timeNow = Math.floor(Date.now() / 1000);
   if (MsgType === 'voice') {
@@ -239,7 +239,7 @@ module.exports = async function (request, response) {
           Content: answer,
         });
         const timeNow2 = Math.floor(Date.now() / 1000);
-        if (timeNow2 - timeNow > 3) {
+        if (timeNow2 - timeNow > 3000) {
           userStashMsg[FromUserName] = answer;
         }
         clearTimeout(timeout);
